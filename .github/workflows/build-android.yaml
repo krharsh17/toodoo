@@ -2,10 +2,8 @@ name: Build Android
 
 on:
   push:
-    branches:
-      - "main"
-#    tags:
-#      - 'v*'
+    tags:
+      - 'v*'
 
 env:
   NEXT_PUBLIC_FIREBASE_API_KEY: ${{secrets.NEXT_PUBLIC_FIREBASE_API_KEY}}
