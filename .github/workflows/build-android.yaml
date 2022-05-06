@@ -41,7 +41,7 @@ jobs:
         run: npx cap add android
 
       - name: Build Next app & sync with Capacitor
-        run: npm run build && npx cap sync
+        run: npm run build && npm run export && npx cap sync
 
       - name: Build app bundle
         run: cd android && gradle bundle
