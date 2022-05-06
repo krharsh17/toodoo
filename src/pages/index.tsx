@@ -3,9 +3,12 @@ import {NextPage} from "next";
 import TodoList from "../components/todolist/TodoList";
 import TodoListHeader from '../components/todolist/ToDoListHeader';
 import AddTodoButton from "../components/todolist/AddTodoButton"
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {ToDo} from "../types/todo";
 import ToDoListFooter from "../components/todolist/ToDoListFooter";
+import {LocalStorage} from "../utils/db/LocalStorageMapper";
+import {useAuth} from "../components/auth/AuthUserContext";
+import DBMapper from "../utils/db/DBMapper";
 
 /**
  * Index page to show the to-do list and enable users to add or
@@ -17,10 +20,27 @@ const Home: NextPage = () => {
     // State container for list of to-dos
     const [toDos, setToDos] = useState<ToDo[]>([])
 
+    // DB mapper instance
+    const lowDB: DBMapper = new LocalStorage()
+
+    // Auth hook for accessing uid
+    const auth = useAuth()
+
+    // Effect to update to-dos from the DB upon loading the page
+    useEffect(() => {
+        if (auth.authUser?.uid)
+            lowDB.getAllToDos(auth.authUser.uid, (toDos: ToDo[]) => {
+                setToDos(toDos)
+            })
+    }, [auth.authUser?.uid])
+
     // Event for adding new to-dos to the list by clicking the add button
     const onAddButtonClicked = () => {
+        const newToDo = {id: Date.now(), title: "", dueDate: (new Date()).toISOString(), isComplete: false, isNew: true}
         const newToDos = [...toDos]
-        newToDos.push({id: Date.now(), title: "", dueDate: (new Date()).toISOString(), isComplete: false, isNew: true})
+
+        newToDos.push(newToDo)
+
         setToDos(newToDos)
         console.log("Add button clicked!")
     }
@@ -42,6 +62,10 @@ const Home: NextPage = () => {
 
         const newTodos = [...toDos]
         newTodos[toDoIndex] = newTodo
+
+        if (auth.authUser?.uid)
+            lowDB.persistToDo(auth.authUser?.uid, newTodo)
+
         setToDos(newTodos)
 
     }
@@ -57,8 +81,14 @@ const Home: NextPage = () => {
     const deleteToDo = (id: number, isNew: boolean) => {
 
         console.log("Delete action received for id: " + id + " isNew: " + isNew)
+        const toDoIndex = toDos.findIndex((elem) => elem.id === id)
+        const toDoToDelete = {...toDos[toDoIndex]}
+
         const newToDos = toDos.filter((elem) => elem.id !== id)
         setToDos(newToDos)
+
+        if (!isNew && auth.authUser?.uid)
+            lowDB.deleteToDo(auth.authUser?.uid, toDoToDelete)
 
     }
 
@@ -83,6 +113,9 @@ const Home: NextPage = () => {
         const newTodos = [...toDos]
         newTodos[toDoIndex] = newTodo
         setToDos(newTodos)
+
+        if (auth.authUser?.uid)
+            lowDB.persistToDo(auth.authUser?.uid, newTodo)
 
     }
 
