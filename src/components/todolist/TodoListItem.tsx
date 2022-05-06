@@ -17,7 +17,15 @@ import {
     PAGE_HORIZONTAL_PADDING,
     SEVERITY_ERROR,
     SEVERITY_INFO,
-    SEVERITY_SUCCESS, TITLE_CLOSE, TITLE_DELETE, TITLE_EDIT, TITLE_SAVE
+    SEVERITY_SUCCESS,
+    TEST_ID_CLOSE,
+    TEST_ID_DELETE, TEST_ID_DUE_DATE_FIELD,
+    TEST_ID_EDIT,
+    TEST_ID_SAVE, TEST_ID_TITLE, TEST_ID_TITLE_FIELD,
+    TITLE_CLOSE,
+    TITLE_DELETE,
+    TITLE_EDIT,
+    TITLE_SAVE
 } from "../../utils/Constants";
 import Checkbox from "@mui/material/Checkbox";
 import Typography from "@mui/material/Typography";
@@ -213,7 +221,7 @@ const ToDoListItem: React.FC<ToDoListItemProps> = ({toDo, toggleDone, updateDeta
                         // Static texts to show to-do details when not in edit mode
                         <Grid item xs={9}>
                             <Grid item xs={12}>
-                                <Typography variant={"h6"}>{itemTitle}</Typography>
+                                <Typography data-testid={TEST_ID_TITLE} variant={"h6"}>{itemTitle}</Typography>
                             </Grid>
                             <Grid item xs={12}>
                                 <Typography
@@ -227,6 +235,7 @@ const ToDoListItem: React.FC<ToDoListItemProps> = ({toDo, toggleDone, updateDeta
                             <Grid item>
                                 <TextField
                                     label={LABEL_TITLE}
+                                    data-testid={TEST_ID_TITLE_FIELD}
                                     value={itemTitle}
                                     onChange={onTitleChange}
                                     variant="standard"
@@ -239,6 +248,7 @@ const ToDoListItem: React.FC<ToDoListItemProps> = ({toDo, toggleDone, updateDeta
                                 <LocalizationProvider dateAdapter={AdapterMoment}>
                                     <DesktopDatePicker
                                         label={LABEL_DUE_DATE}
+                                        data-testid={TEST_ID_DUE_DATE_FIELD}
                                         inputFormat={DUE_DATE_FORMAT}
                                         value={itemDueDate}
                                         onChange={onDueDateChange}
@@ -258,6 +268,7 @@ const ToDoListItem: React.FC<ToDoListItemProps> = ({toDo, toggleDone, updateDeta
                         <Tooltip title={TITLE_EDIT}>
                             <IconButton
                                 aria-label={ARIA_LABEL_EDIT}
+                                data-testid={TEST_ID_EDIT}
                                 onClick={onEditIconClick}
                                 style={{margin: "0 2px"}}>
                                 <CreateIcon/>
@@ -269,6 +280,7 @@ const ToDoListItem: React.FC<ToDoListItemProps> = ({toDo, toggleDone, updateDeta
                         <Tooltip title={TITLE_DELETE}>
                             <IconButton
                                 aria-label={ARIA_LABEL_DELETE}
+                                data-testid={TEST_ID_DELETE}
                                 onClick={onDeleteIconClick}
                                 style={{margin: "0 2px"}}>
                                 <DeleteIcon/>
@@ -280,6 +292,7 @@ const ToDoListItem: React.FC<ToDoListItemProps> = ({toDo, toggleDone, updateDeta
                         <Tooltip title={TITLE_CLOSE}>
                             <IconButton
                                 aria-label={ARIA_LABEL_CLOSE}
+                                data-testid={TEST_ID_CLOSE}
                                 onClick={onCloseIconClick}
                                 style={{margin: "0 2px"}}>
                                 <CloseIcon/>
@@ -291,6 +304,7 @@ const ToDoListItem: React.FC<ToDoListItemProps> = ({toDo, toggleDone, updateDeta
                         <Tooltip title={TITLE_SAVE}>
                             <IconButton
                                 aria-label={ARIA_LABEL_SAVE}
+                                data-testid={TEST_ID_SAVE}
                                 onClick={onSaveIconClick}
                                 style={{margin: "0 2px"}}>
                                 <SaveIcon/>

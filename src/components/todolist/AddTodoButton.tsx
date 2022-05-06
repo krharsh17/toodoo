@@ -1,6 +1,7 @@
 import React from "react"
 import {Fab} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import {TEST_ID_ADD} from "../../utils/Constants";
 
 /**
  * Material FAB button that enables users to add
@@ -12,7 +13,7 @@ const AddTodoButton: React.FC<AddTodoButtonPropTypes> = ({onAddButtonClicked}) =
 
     return <>
         <div style={{position: "absolute", bottom: 16, right: 16}}>
-            <Fab color="primary" aria-label="add" onClick={onAddButtonClicked}>
+            <Fab color="primary" aria-label="add" data-testid={TEST_ID_ADD} onClick={onAddButtonClicked}>
                 <AddIcon/>
             </Fab>
         </div>
